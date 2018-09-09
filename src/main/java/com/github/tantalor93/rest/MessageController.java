@@ -15,8 +15,10 @@ public class MessageController {
 
     @KafkaListener(topics = "test")
     public void listen(String message) {
-        list.add(message);
-        System.out.println("Received Messasge in group foo: " + message);
+        synchronized (list) {
+            list.add(message);
+        }
+        System.out.println("Received message: " + message);
     }
 
     @GetMapping
